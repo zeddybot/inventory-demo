@@ -29,8 +29,8 @@ class Order(Base):
         DateTime, server_default=func.now()
     )
 
-    items: Mapped[list["OrderItem"]] = relationship(back_populates="order")
-    allocations: Mapped[list["Allocation"]] = relationship(back_populates="order")
+    items: Mapped[list["OrderItem"]] = relationship(back_populates="order", cascade="all, delete-orphan")
+    allocations: Mapped[list["Allocation"]] = relationship(back_populates="order", cascade="all, delete-orphan")
 
 
 class OrderItem(Base):
