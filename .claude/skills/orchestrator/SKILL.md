@@ -1,6 +1,6 @@
 ---
 name: orchestrator
-description: Spin up and tear down git worktrees with tmux and Claude session. Trigger on "spin DEMO-123", "create worktree", "clean up worktrees", etc.
+description: Spin up and tear down git worktrees with tmux and Claude session. Trigger on "spin DEV-123", "create worktree", "clean up worktrees", etc.
 allowed-tools: Bash(~/.claude/skills/orchestrator/*), Bash(linearis *), Bash(git *), Bash(tmux *), Bash(gh *), Read, Glob, Grep
 ---
 
@@ -10,18 +10,18 @@ Automates creating inventory-demo worktrees with tmux window and Claude Code ses
 
 ## Creation Workflow
 
-When the user says "spin DEMO-123", "worktree for DEMO-456", or similar:
+When the user says "spin DEV-123", "worktree for DEV-456", or similar:
 
 ### Step 1: Fetch ticket context
 
 ```bash
-linearis issues read DEMO-123
+linearis issues read DEV-123
 ```
 
 Extract from the JSON response:
 - `branchName` — the git branch (e.g. `sameer/demo-123-fix-auth-bug`)
 - `title` — ticket title for deriving the slug
-- `identifier` — ticket ID (e.g. `DEMO-123`)
+- `identifier` — ticket ID (e.g. `DEV-123`)
 
 ### Step 2: Derive parameters
 
@@ -39,7 +39,7 @@ Present the derived config to the user briefly, then run the script.
 
 ```bash
 ~/.claude/skills/orchestrator/setup-worktree.sh \
-  --ticket DEMO-123 \
+  --ticket DEV-123 \
   --slug search-endpoint \
   --branch "sameer/demo-123-add-search-endpoint" \
   --base main \
@@ -58,12 +58,12 @@ Tell the user the worktree path, tmux window name, and branch.
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--ticket <ID>` | (none) | Linear ticket ID (e.g. DEMO-123) |
+| `--ticket <ID>` | (none) | Linear ticket ID (e.g. DEV-123) |
 | `--slug <name>` | from ticket title | Worktree folder suffix → `inventory-demo-{slug}` |
 | `--branch <name>` | from Linear branchName | Git branch to create/checkout |
 | `--base <branch>` | current branch | Base branch (uses `origin/{base}`) |
 | `--tmux-name <name>` | slug | Tmux window name |
-| `--prompt <text>` | "hi claude, can you help me make a plan for DEMO-XXX" | Initial Claude prompt |
+| `--prompt <text>` | "hi claude, can you help me make a plan for DEV-XXX" | Initial Claude prompt |
 | `--session <name>` | fractal | Tmux session name |
 | `--claude-name <name>` | tmux-name | Name for Claude `/rename` |
 

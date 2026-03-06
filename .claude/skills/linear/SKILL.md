@@ -1,12 +1,12 @@
 ---
 name: linear
-description: Work with Linear issues via the linearis CLI. Use when user mentions issue IDs (DEMO-123), wants to create issues, start working on a ticket, create branches or worktrees from issues, or asks about sprints/cycles.
+description: Work with Linear issues via the linearis CLI. Use when user mentions issue IDs (DEV-123), wants to create issues, start working on a ticket, create branches or worktrees from issues, or asks about sprints/cycles.
 allowed-tools: Bash(linearis:*), Bash(git:*), Bash(which linearis)
 ---
 
 # Linear
 
-Use the `linearis` CLI for all Linear operations. It outputs JSON and supports both UUIDs and issue identifiers (e.g., `DEMO-123`).
+Use the `linearis` CLI for all Linear operations. It outputs JSON and supports both UUIDs and issue identifiers (e.g., `DEV-123`).
 
 ## Prerequisites
 
@@ -32,10 +32,10 @@ If not installed, tell the user:
 
 ```bash
 linearis usage                    # Full command reference
-linearis issues read DEMO-123    # Get issue details
+linearis issues read DEV-123    # Get issue details
 linearis issues search "query"   # Search issues
-linearis issues create "Title" --team DEMO -d "Description"
-linearis issues update DEMO-123 --status "In Progress"
+linearis issues create "Title" --team DEV -d "Description"
+linearis issues update DEV-123 --status "In Progress"
 ```
 
 ## Common Workflows
@@ -44,7 +44,7 @@ linearis issues update DEMO-123 --status "In Progress"
 
 ```bash
 linearis issues create "Issue title" \
-  --team DEMO \
+  --team DEV \
   -d "Description here" \
   -p 2 \                          # Priority 1-4 (1=urgent)
   --labels "bug,frontend" \
@@ -57,17 +57,17 @@ When user wants to start working on an issue, follow this workflow:
 
 1. **Fetch the issue** to get details:
    ```bash
-   linearis issues read DEMO-123
+   linearis issues read DEV-123
    ```
 
 2. **Update status** to "In Progress":
    ```bash
-   linearis issues update DEMO-123 --status "In Progress"
+   linearis issues update DEV-123 --status "In Progress"
    ```
 
 3. **Create a git branch** using the naming convention `<username>/<team-key>-<number>-<slug>`:
    ```bash
-   # Extract from issue: identifier (DEMO-123) and title
+   # Extract from issue: identifier (DEV-123) and title
    # Create branch like: sameer/demo-123-fix-login-bug
    git checkout -b "sameer/demo-123-slug-from-title"
    ```
@@ -79,7 +79,7 @@ For parallel work, create a worktree instead of switching branches. This is the 
 **Step 1: Get the branch name from the issue**
 
 ```bash
-linearis issues read DEMO-123
+linearis issues read DEV-123
 # Look for "branchName" in the JSON output
 ```
 
@@ -90,9 +90,9 @@ From the main repo (e.g., `inventory-demo`), create worktree in a parallel direc
 **Folder naming convention:** `inventory-demo-<descriptive-slug>` based on the ticket title, NOT just the issue key.
 
 Examples:
-- DEMO-1 "Add search endpoint for inventory" → `inventory-demo-search-endpoint`
-- DEMO-2 "Fix stock validation bug" → `inventory-demo-stock-validation`
-- DEMO-3 "Add CSV export feature" → `inventory-demo-csv-export`
+- DEV-1 "Add search endpoint for inventory" → `inventory-demo-search-endpoint`
+- DEV-2 "Fix stock validation bug" → `inventory-demo-stock-validation`
+- DEV-3 "Add CSV export feature" → `inventory-demo-csv-export`
 
 ```bash
 # For a new branch (branch doesn't exist yet)
@@ -117,7 +117,7 @@ git push -u origin HEAD
 
 ```bash
 # Search by text
-linearis issues search "authentication bug" --team DEMO
+linearis issues search "authentication bug" --team DEV
 
 # Filter by status
 linearis issues search "" --status "In Progress,Todo"
@@ -133,22 +133,22 @@ linearis issues search "" --project "Project Name"
 
 ```bash
 # Change status
-linearis issues update DEMO-123 --status "Done"
+linearis issues update DEV-123 --status "Done"
 
 # Add labels
-linearis issues update DEMO-123 --labels "reviewed"
+linearis issues update DEV-123 --labels "reviewed"
 
 # Set milestone
-linearis issues update DEMO-123 --project-milestone "v1.0"
+linearis issues update DEV-123 --project-milestone "v1.0"
 
 # Add to cycle/sprint
-linearis issues update DEMO-123 --cycle "Sprint 5"
+linearis issues update DEV-123 --cycle "Sprint 5"
 ```
 
 ### 6. Add Comments
 
 ```bash
-linearis comments create DEMO-123 --body "Comment text here"
+linearis comments create DEV-123 --body "Comment text here"
 ```
 
 ## Branch Naming Convention
@@ -190,8 +190,8 @@ Linear renders markdown but shell escaping can corrupt it. Follow these rules wh
 ```bash
 # 1. Write description to a temp file using the Write tool (NOT echo/cat heredoc)
 # 2. Pass it to linearis:
-linearis issues create "Title" --team DEMO -d "$(cat /tmp/description.md)"
-linearis issues update DEMO-123 -d "$(cat /tmp/description.md)"
+linearis issues create "Title" --team DEV -d "$(cat /tmp/description.md)"
+linearis issues update DEV-123 -d "$(cat /tmp/description.md)"
 ```
 
 **Never** escape backticks as `\`` in descriptions — Linear will store them literally and code blocks / mermaid diagrams won't render.

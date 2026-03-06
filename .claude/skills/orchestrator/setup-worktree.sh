@@ -176,10 +176,20 @@ git -C "$WORKTREE_DIR" push -u origin HEAD 2>/dev/null || {
     echo "    (Branch may already be tracked on remote, continuing...)"
 }
 
+# ── Python venv setup ────────────────────────────────────────────────
+echo "==> Setting up Python venv..."
+python3 -m venv "$WORKTREE_DIR/.venv"
+source "$WORKTREE_DIR/.venv/bin/activate"
+pip install -q -r "$WORKTREE_DIR/requirements.txt"
+
 # ── Tmux + Claude ────────────────────────────────────────────────────
 echo "==> Creating tmux window '$TMUX_NAME'..."
 tmux new-window -t "$SESSION" -n "$TMUX_NAME" -c "$WORKTREE_DIR"
 
+sleep 1
+
+tmux send-keys -t "$SESSION:$TMUX_NAME" -l "source .venv/bin/activate"
+tmux send-keys -t "$SESSION:$TMUX_NAME" Enter
 sleep 1
 
 tmux send-keys -t "$SESSION:$TMUX_NAME" -l "claude --allow-dangerously-skip-permissions --permission-mode plan"
