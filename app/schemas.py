@@ -82,3 +82,30 @@ class AllocationRead(BaseModel):
     allocated_quantity: int
 
     model_config = {"from_attributes": True}
+
+
+# -- Allocate Inventory Response --
+
+class AllocationDetail(BaseModel):
+    order_id: int
+    product_id: int
+    requested_quantity: int
+    allocated_quantity: int
+
+    model_config = {"from_attributes": True}
+
+
+class OrderAllocationSummary(BaseModel):
+    order_id: int
+    customer: str
+    priority: int
+    fully_fulfilled: bool
+    allocations: list[AllocationDetail]
+
+
+class AllocateInventoryResponse(BaseModel):
+    total_allocations_created: int
+    orders_processed: int
+    orders_fully_fulfilled: int
+    orders_partially_fulfilled: int
+    order_summaries: list[OrderAllocationSummary]
